@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
     width: 100%;
     p{
-        font-size: 1.5rem;
         margin-left: 1rem;
     }
 `

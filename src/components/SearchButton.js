@@ -16,7 +16,9 @@ const Circle = styled.button`
     justify-content: center;
     align-items: center;
     color: #1C1D21;
-    font-size: 3rem;
+    p{
+        font-size: 3rem;
+    }
 `
 
 const SearchButton = () => {
