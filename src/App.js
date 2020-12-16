@@ -8,6 +8,7 @@ import { getWeather, getCityName } from './units/helpers';
 import Mode from './components/Mode';
 import SearchButton from './components/SearchButton';
 import MainCity from './components/MainCity';
+import Search from './components/Search';
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -21,28 +22,34 @@ const GlobalStyles = createGlobalStyle`
     font-size: 10px;
   }
   body {
+    height: 100vh;
+    width: 100vw;
     transition: background-color 500ms ease;
     background: ${({ theme }) => theme.bg};
     color: ${({ theme }) => theme.text};
     margin: 1rem;
     padding: 0;
+    overflow: hidden;
   }
   p{
     font-size: 1.5rem;
   }
 `
 
-
 class App extends Component {
   constructor(){
     super();
     this.switchTheme = this.switchTheme.bind(this);
     this.getLocation = this.getLocation.bind(this);
+    this.showSearch = this.showSearch.bind(this);
+    this.findCity = this.findCity.bind(this);
 
     this.state = {
       theme: true,
       currentCityWeather: {},
       currentCity: '',
+      search: false,
+      city: ''
     }
   }
 
@@ -53,6 +60,15 @@ class App extends Component {
   switchTheme() {
     const currentTheme = this.state.theme;
     this.setState({ theme: !currentTheme })
+  }
+  showSearch(){
+    const currentState = this.state.search;
+    this.setState({search: !currentState});
+  }
+  async findCity(e){
+      e.preventDefault()
+      await this.setState({city: e.target.city.value});
+      e.target.city.value = '';
   }
 
   async getLocation({coords} ){
@@ -79,8 +95,9 @@ class App extends Component {
             <MainCity 
               city={this.state.currentCity}
               weather={this.state.currentCityWeather}/>}
-          </Wrapper>            
-          <SearchButton />
+          </Wrapper>
+          <Search isOpen={this.state.search} find={this.findCity}/>
+          <SearchButton click={this.showSearch} rotate={this.state.search}/>
         </>
       </ThemeProvider>
     )
