@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 import Loader from './Loader';
+import { reverseGeolocation } from '../units/helpers';
 
 const Container = styled.div`
     display: flex;
@@ -42,10 +43,16 @@ const Form =  styled.form`
 `
 const Search = props => {
     const [ city, setCity ] = useState('');
+
+    const cityWeather = (e) => {
+        e.preventDefault();
+        reverseGeolocation(city)
+    }
+
     return(
         <Container isOpen={props.isOpen}>
             <Box>
-                <Form onSubmit={props.find}>
+                <Form onSubmit={cityWeather}>
                     <input 
                         type="text" 
                         placeholder="Search your city" 
