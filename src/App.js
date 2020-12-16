@@ -42,14 +42,12 @@ class App extends Component {
     this.switchTheme = this.switchTheme.bind(this);
     this.getLocation = this.getLocation.bind(this);
     this.showSearch = this.showSearch.bind(this);
-    this.findCity = this.findCity.bind(this);
 
     this.state = {
       theme: true,
       currentCityWeather: {},
       currentCity: '',
       search: false,
-      city: ''
     }
   }
 
@@ -65,11 +63,6 @@ class App extends Component {
     const currentState = this.state.search;
     this.setState({search: !currentState});
   }
-  async findCity(e){
-      e.preventDefault()
-      await this.setState({city: e.target.city.value});
-      e.target.city.value = '';
-  }
 
   async getLocation({coords} ){
     const pos = {
@@ -80,7 +73,6 @@ class App extends Component {
     const currentWeather = weather.current
     const city = await getCityName(pos.lat, pos.long);
     this.setState({currentCity: city, currentCityWeather: currentWeather});
-
   }
 
   render() {
