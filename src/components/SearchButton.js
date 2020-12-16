@@ -16,14 +16,17 @@ const Circle = styled.button`
     justify-content: center;
     align-items: center;
     color: #1C1D21;
+    transition: transform 500ms ease;
+    outline: 0;
+    transform: ${(props) => props.rotate ? 'rotate(225deg)' : 'rotate(0)'};
     p{
         font-size: 3rem;
     }
 `
 
-const SearchButton = () => {
+const SearchButton = props => {
     return(
-        <Circle type="button">
+        <Circle type="button" onClick={props.click} rotate={props.rotate}>
             <p>+</p>
         </Circle>
     )
