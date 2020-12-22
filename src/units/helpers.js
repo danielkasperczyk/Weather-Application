@@ -28,11 +28,16 @@ export async function reverseGeolocation(city){
     else {
         return new Error('City not found');
     }
-    // const {lat,lng} = await response.data.results[0].geometry;
-    // return {lat, lng};
 }
 
 export function transformToUpperCase(string){
     return string.split(' ').map(str => str.charAt(0).toUpperCase() + str.substr(1)).join(' ');
+}
+
+export function convertToDays(days){
+    console.log(days);
+    days.forEach(day => {
+        const time = new Date().getTime(); 
+    })
 }
 
