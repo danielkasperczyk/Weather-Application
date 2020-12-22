@@ -3,7 +3,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import { lightTheme, darkTheme } from './units/theme';
 import { Wrapper } from './units/style';
-import { getWeather, getCityName } from './units/helpers';
+import { getWeather, getCityName, reverseGeolocation, convertToDays } from './units/helpers';
 
 import Mode from './components/Mode';
 import SearchButton from './components/SearchButton';
@@ -42,6 +42,7 @@ class App extends Component {
     this.switchTheme = this.switchTheme.bind(this);
     this.getLocation = this.getLocation.bind(this);
     this.showSearch = this.showSearch.bind(this);
+    this.setCity = this.setCity.bind(this);
 
     this.state = {
       theme: true,
@@ -75,6 +76,14 @@ class App extends Component {
     this.setState({currentCity: city, currentCityWeather: currentWeather});
   }
 
+  async setCity(e){
+    const city = e.target.textContent;
+    const data = await reverseGeolocation(city);
+    const {lat, lng} = await data[0].geometry;
+    const weather = await getWeather(lat,lng);
+    convertToDays(weather.hourly)
+  }
+
   render() {
     const cityExist = Object.keys(this.state.currentCityWeather).length !== 0 ? true : false
     return (
@@ -88,7 +97,7 @@ class App extends Component {
               city={this.state.currentCity}
               weather={this.state.currentCityWeather}/>}
           </Wrapper>
-          <Search isOpen={this.state.search} find={this.findCity}/>
+          <Search isOpen={this.state.search} click={this.setCity}/>
           <SearchButton click={this.showSearch} rotate={this.state.search}/>
         </>
       </ThemeProvider>
