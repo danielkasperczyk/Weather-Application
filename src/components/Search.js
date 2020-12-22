@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 import Loader from './Loader';
-import { reverseGeolocation } from '../units/helpers';
+import SearchCities from './SearchCities';
+import { reverseGeolocation, transformToUpperCase } from '../units/helpers';
 
 const Container = styled.div`
     display: flex;
@@ -43,25 +44,29 @@ const Form =  styled.form`
 `
 const Search = props => {
     const [ city, setCity ] = useState('');
+    const [citiesFound, setCities] = useState([]);
 
-    const cityWeather = (e) => {
+    const findCity = async e => {
         e.preventDefault();
-        reverseGeolocation(city)
+        const cityFound = await reverseGeolocation(city);
+        await setCities(cityFound);
+        e.target.city.value = ''
     }
 
     return(
         <Container isOpen={props.isOpen}>
             <Box>
-                <Form onSubmit={cityWeather}>
+                <Form onSubmit={findCity}>
                     <input 
                         type="text" 
                         placeholder="Search your city" 
                         name="city" 
                         autoComplete="off"
                         value={city}
-                        onChange={(e) => setCity(e.target.value)}/>
+                        onChange={(e) => setCity(transformToUpperCase(e.target.value))}/>
                 </Form>
-                <Loader />
+
+                <SearchCities cities={citiesFound} click={props.click}/>
             </Box>     
         </Container>
     )
