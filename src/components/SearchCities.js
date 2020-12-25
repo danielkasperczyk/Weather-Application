@@ -30,13 +30,17 @@ const Button = styled.button`
 `
 
 const SearchCities = props => {
+    const click = (e) => {
+        props.click(e);
+        props.hideSearch();
+    }
     return(
         <List>
             {props.cities.map(city => 
                 <li key={city.index}>
                     <Button 
                         type="button"
-                        onClick={props.click}>
+                        onClick={click}>
                         {city.formatted} 
                     </Button>
                 </li>)}

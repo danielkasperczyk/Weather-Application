@@ -66,7 +66,7 @@ const Search = props => {
                         onChange={(e) => setCity(transformToUpperCase(e.target.value))}/>
                 </Form>
 
-                <SearchCities cities={citiesFound} click={props.click}/>
+                <SearchCities cities={citiesFound} click={props.click} hideSearch={props.hideSearch}/>
             </Box>     
         </Container>
     )

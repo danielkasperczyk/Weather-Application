@@ -8,8 +8,7 @@ const City = styled.div`
     margin-top: 1rem;
     width: 100%;
     max-width: 450px;
-    background: ${({theme}) => theme.purple};
-    background: #445878;
+    background-color: ${({theme}) => theme.box};
     border-radius: 10px;
     color: #EEEFF7;
     height: 150px;

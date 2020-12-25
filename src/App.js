@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import uniqid from 'uniqid';
 
 import { lightTheme, darkTheme } from './units/theme';
 import { Wrapper } from './units/style';
-import { getWeather, getCityName, reverseGeolocation, convertToDays } from './units/helpers';
+import { getWeather, getCityName, reverseGeolocation, areSame } from './units/helpers';
 
 import Mode from './components/Mode';
 import SearchButton from './components/SearchButton';
 import MainCity from './components/MainCity';
 import Search from './components/Search';
+import OtherCities from './components/OtherCities';
+
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -20,6 +23,7 @@ const GlobalStyles = createGlobalStyle`
   }
   html{
     font-size: 10px;
+    font-family: 'Lato', sans-serif;
   }
   body {
     height: 100vh;
@@ -49,11 +53,16 @@ class App extends Component {
       currentCityWeather: {},
       currentCity: '',
       search: false,
+      otherCities: []
     }
   }
 
   componentDidMount(){
-    navigator.geolocation.getCurrentPosition(this.getLocation)
+    navigator.geolocation.getCurrentPosition(this.getLocation);
+    if(localStorage.getItem('cities')){
+      this.setState({otherCities: JSON.parse(localStorage.getItem('cities'))})
+    }
+
   }
 
   switchTheme() {
@@ -81,7 +90,18 @@ class App extends Component {
     const data = await reverseGeolocation(city);
     const {lat, lng} = await data[0].geometry;
     const weather = await getWeather(lat,lng);
-    convertToDays(weather.hourly)
+    const cityObj = {
+      city,
+      temp: Math.round(weather.current.temp),
+      id: uniqid()
+    }
+    if(!areSame(cityObj ,this.state.otherCities)){
+      this.setState(prevState => ({
+        otherCities: [...prevState.otherCities , cityObj]
+    }))
+      localStorage.setItem('cities', JSON.stringify(this.state.otherCities))
+    }
+    
   }
 
   render() {
@@ -97,8 +117,14 @@ class App extends Component {
               city={this.state.currentCity}
               weather={this.state.currentCityWeather}/>}
           </Wrapper>
-          <Search isOpen={this.state.search} click={this.setCity}/>
-          <SearchButton click={this.showSearch} rotate={this.state.search}/>
+          <Search 
+              hideSearch={this.showSearch} 
+              isOpen={this.state.search} 
+              click={this.setCity}/>
+          <SearchButton 
+              click={this.showSearch} 
+              rotate={this.state.search}/>
+          {this.state.otherCities.length > 0 && <OtherCities cities={this.state.otherCities}/>}
         </>
       </ThemeProvider>
     )
