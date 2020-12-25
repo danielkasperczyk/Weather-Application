@@ -15,10 +15,6 @@ export async function getWeather(lat, lon){
     return response.data;
 }
 
-export async function getWeatherByName(city){
-    const response = await axios.get(``)
-}
-
 export async function reverseGeolocation(city){
     const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${city}&key=85e2f7977b8743ae855a296daa1f9d29`)
     const result = response.data.results
@@ -34,10 +30,9 @@ export function transformToUpperCase(string){
     return string.split(' ').map(str => str.charAt(0).toUpperCase() + str.substr(1)).join(' ');
 }
 
-export function convertToDays(days){
-    console.log(days);
-    days.forEach(day => {
-        const time = new Date().getTime(); 
-    })
-}
+export function areSame(city, cities){
+    let same = false;
+    cities.forEach(item => item.city === city.city ? same = true : null)
 
+    return same;
+}
