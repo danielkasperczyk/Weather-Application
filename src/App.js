@@ -26,14 +26,14 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Lato', sans-serif;
   }
   body {
-    height: 100vh;
+    height: 100%;
     width: 100vw;
     transition: background-color 500ms ease;
     background: ${({ theme }) => theme.bg};
     color: ${({ theme }) => theme.text};
-    margin: 1rem;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: ${(props) => props.modal && 'hidden'}
   }
   p{
     font-size: 1.5rem;
@@ -47,6 +47,7 @@ class App extends Component {
     this.getLocation = this.getLocation.bind(this);
     this.showSearch = this.showSearch.bind(this);
     this.setCity = this.setCity.bind(this);
+    this.removeCity = this.removeCity.bind(this);
 
     this.state = {
       theme: true,
@@ -104,12 +105,19 @@ class App extends Component {
     
   }
 
+  removeCity(e){
+    const { id } = e.target;
+    const filteredState = this.state.otherCities.filter(city => city.id !==id)
+    this.setState({otherCities: filteredState});
+    localStorage.setItem('cities', JSON.stringify(filteredState));
+  }
+
   render() {
     const cityExist = Object.keys(this.state.currentCityWeather).length !== 0 ? true : false
     return (
       <ThemeProvider theme={this.state.theme === true ? darkTheme : lightTheme} >
         <>
-        <GlobalStyles />
+        <GlobalStyles modal={this.state.search}/>
           <Mode switch={this.switchTheme} dark={this.state.theme}/>
           <Wrapper>
             {cityExist && 
@@ -121,10 +129,13 @@ class App extends Component {
               hideSearch={this.showSearch} 
               isOpen={this.state.search} 
               click={this.setCity}/>
+          {this.state.otherCities.length > 0 && 
+            <OtherCities 
+              cities={this.state.otherCities}
+              remove={this.removeCity}/>}
           <SearchButton 
               click={this.showSearch} 
               rotate={this.state.search}/>
-          {this.state.otherCities.length > 0 && <OtherCities cities={this.state.otherCities}/>}
         </>
       </ThemeProvider>
     )
