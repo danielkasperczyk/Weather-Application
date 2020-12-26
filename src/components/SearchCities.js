@@ -27,6 +27,7 @@ const Button = styled.button`
     background-color: transparent;
     border: none;
     color: ${({theme}) => theme.text};
+    position: relative;
 `
 
 const SearchCities = props => {
@@ -34,9 +35,11 @@ const SearchCities = props => {
         props.click(e);
         props.hideSearch();
     }
+
+    const isntError = props.cities.length > 0 ? true : false;
     return(
         <List>
-            {props.cities.map(city => 
+            {isntError && props.cities.map(city => 
                 <li key={city.index}>
                     <Button 
                         type="button"

@@ -4,7 +4,7 @@ const Circle = styled.button`
     border: none;
     outline: 0;
     cursor: pointer;
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     width: 40px;
@@ -18,6 +18,7 @@ const Circle = styled.button`
     color: #1C1D21;
     transition: transform 500ms ease;
     outline: 0;
+    z-index:15;
     transform: ${(props) => props.rotate ? 'rotate(225deg)' : 'rotate(0)'};
     p{
         font-size: 3rem;

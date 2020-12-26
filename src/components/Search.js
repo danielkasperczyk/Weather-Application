@@ -17,9 +17,10 @@ const Container = styled.div`
     bottom: 0;
     background-color: ${({theme}) => theme.search};
     transition: all 500ms ease;
-    transform: ${(props) => props.isOpen === true ? 'translate(0, 0)' : 'translate(75%, 75%)'};
+    transform: ${(props) => props.isOpen === true ? `translate(0, ${window.pageYOffset}px)` : 'translate(-100%, -100%)'};
     border-radius: ${(props) => props.isOpen ? '0' : '50%'};
     opacity: ${(props) => props.isOpen ? '1' : '0'};
+    z-index: 10;
 `
 const Box = styled.div`
     width: 100%;
@@ -49,14 +50,14 @@ const Search = props => {
     const findCity = async e => {
         e.preventDefault();
         const cityFound = await reverseGeolocation(city);
-        await setCities(cityFound);
+        setCities(cityFound);
         e.target.city.value = ''
     }
 
     return(
         <Container isOpen={props.isOpen}>
             <Box>
-                <Form onSubmit={findCity}>
+                <Form onSubmit={findCity} autoComplete="off">
                     <input 
                         type="text" 
                         placeholder="Search your city" 
